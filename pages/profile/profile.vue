@@ -8,6 +8,9 @@
 				<u-form-item label="手机号">
 					<u-input v-model="form.phone" type="number" placeholder="请输入手机号"></u-input>
 				</u-form-item>
+				<u-form-item label="配送地址">
+					<u-input v-model="form.address" type="textarea" :auto-height="true" placeholder="请输入配送地址（外送订单必填）" :maxlength="200"></u-input>
+				</u-form-item>
 				<u-form-item label="头像">
 					<view class="avatar-preview" @click="handleAvatarClick">
 						<u-avatar :src="form.avatar || defaultAvatar" size="140"></u-avatar>
@@ -29,25 +32,42 @@ import { BASE_URL } from '@/common/config.js'
 import { userApi } from '@/common/api.js'
 
 export default {
-	data() {
-		return {
-			form: {
-				name: '',
-				phone: '',
-				avatar: ''
-			},
-			userId: null,
-			loading: false,
-			defaultAvatar: '/static/my/avatarurl.jpg'
-		}
-	},
+		data() {
+			return {
+				form: {
+					name: '',
+					phone: '',
+					address: '',
+					avatar: ''
+				},
+				userId: null,
+				loading: false,
+				defaultAvatar: '/static/my/avatarurl.jpg'
+			}
+		},
 	onLoad() {
 		const storedUserInfo = uni.getStorageSync('userInfo')
 		if (storedUserInfo) {
 			this.userId = storedUserInfo.id
 			this.form.name = storedUserInfo.name || storedUserInfo.realname || ''
 			this.form.phone = storedUserInfo.phone || ''
+			this.form.address = storedUserInfo.address || ''
 			this.form.avatar = storedUserInfo.avatar || ''
+		}
+	},
+	onShow() {
+		// 检查是否需要返回结算页面
+		const needReturnToSettlement = uni.getStorageSync('needReturnToSettlement')
+		if (needReturnToSettlement) {
+			// 检查地址是否已填写
+			const storedUserInfo = uni.getStorageSync('userInfo')
+			if (storedUserInfo && storedUserInfo.address && storedUserInfo.address.trim()) {
+				// 地址已填写，清除标记并返回结算页面
+				uni.removeStorageSync('needReturnToSettlement')
+				setTimeout(() => {
+					uni.navigateBack()
+				}, 500)
+			}
 		}
 	},
 		methods: {
@@ -151,6 +171,7 @@ export default {
 				userId: this.userId,
 				name: this.form.name,
 				phone: this.form.phone,
+				address: this.form.address,
 				avatar: this.form.avatar
 			}).then(res => {
 				if (res && res.code === 200) {
@@ -163,12 +184,23 @@ export default {
 						...storedUserInfo,
 						name: this.form.name,
 						phone: this.form.phone,
+						address: this.form.address,
 						avatar: this.form.avatar
 					}
 					uni.setStorageSync('userInfo', updatedUserInfo)
-					setTimeout(() => {
-						uni.navigateBack()
-					}, 1500)
+					
+					// 检查是否需要返回结算页面
+					const needReturnToSettlement = uni.getStorageSync('needReturnToSettlement')
+					if (needReturnToSettlement && this.form.address && this.form.address.trim()) {
+						uni.removeStorageSync('needReturnToSettlement')
+						setTimeout(() => {
+							uni.navigateBack()
+						}, 1500)
+					} else {
+						setTimeout(() => {
+							uni.navigateBack()
+						}, 1500)
+					}
 				}
 			}).catch(error => {
 				console.error('保存失败', error)

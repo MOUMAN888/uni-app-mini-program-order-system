@@ -154,19 +154,7 @@
 			},
 			// spotmeal
 			orderFood(param) {
-				// 如果是外卖派送（param === 1），显示提示弹窗
-				if (param === 1) {
-					// 使用 setTimeout 延迟显示，确保弹窗不被遮挡
-					setTimeout(() => {
-						uni.showModal({
-							title: '提示',
-							content: '外卖暂时未开放',
-							showCancel: false,
-							confirmText: '知道了'
-						})
-					}, 100)
-					return
-				}
+				// 设置订单类型（0: 堂食, 1: 外卖）
 				uni.setStorageSync('subCurrent', param);
 				uni.switchTab({
 					url: '/pages/menu/menu'

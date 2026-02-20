@@ -273,9 +273,9 @@ export default {
 			subList: [{
 				name: '堂食'
 			},
-			// {
-			// 	name: '外卖'
-			// }
+			{
+				name: '外卖'
+			}
 			],
 			subCurrent: 0,
 			// bannerList
@@ -378,6 +378,24 @@ export default {
 			this.clickEmptyShop();
 			// 清除标记
 			uni.removeStorageSync('shouldClearCart');
+		}
+		
+		// 检查是否需要返回结算页面（从个人信息页面返回且已填写地址）
+		const needReturnToSettlement = uni.getStorageSync('needReturnToSettlement');
+		if (needReturnToSettlement) {
+			const userInfo = uni.getStorageSync('userInfo') || {};
+			if (userInfo.address && userInfo.address.trim()) {
+				// 地址已填写，清除标记并跳转到结算页面
+				uni.removeStorageSync('needReturnToSettlement');
+				const dishData = uni.getStorageSync('dishData');
+				if (dishData && dishData.order && dishData.order.length > 0) {
+					setTimeout(() => {
+						uni.navigateTo({
+							url: `/subPack/index/indexSettlement?subCurrent=${this.subCurrent}`
+						});
+					}, 300);
+				}
+			}
 		}
 		
 		// 处理"再来一单"功能
@@ -522,6 +540,34 @@ export default {
 
 			const filteredMenu = this.SelectMenu.filter(item => item.value !== 0);
 			if (!filteredMenu.length) return;
+
+			// 如果是外送模式，检查用户是否填写了地址
+			if (this.subCurrent === 1) {
+				const userInfo = uni.getStorageSync('userInfo') || {};
+				if (!userInfo.address || !userInfo.address.trim()) {
+					uni.showModal({
+						title: '提示',
+						content: '外送订单需要填写配送地址，是否前往填写？',
+						success: (res) => {
+							if (res.confirm) {
+								// 保存当前订单数据，以便返回后继续结算
+								const dishData = {
+									order: filteredMenu,
+									menuNum: this.menuNum,
+									menuPrice: this.menuPrice
+								};
+								uni.setStorageSync('dishData', dishData);
+								uni.setStorageSync('needReturnToSettlement', true);
+								// 跳转到个人信息页面
+								uni.navigateTo({
+									url: '/pages/profile/profile'
+								});
+							}
+						}
+					});
+					return;
+				}
+			}
 
 			const dishData = {
 				order: filteredMenu,

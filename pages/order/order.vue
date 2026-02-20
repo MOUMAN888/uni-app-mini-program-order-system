@@ -73,9 +73,21 @@
 				<view class="again-btn" @click.stop="oneMore(item)">
 					<u-tag text="再来一单" mode="plain" shape="circle" type="info" />
 				</view>
-				<!-- 管理员可见的已完成按钮 -->
-				<view v-if="isAdmin && item.status !== '已出餐' && item.statusValue !== 3" class="complete-btn" @click.stop="updateOrderStatus(item)">
+				<!-- 管理员可见的已完成按钮（堂食订单） -->
+				<view v-if="isAdmin && item.eatStatus === '堂食' && item.status !== '已出餐' && item.statusValue !== 3" class="complete-btn" @click.stop="updateOrderStatus(item)">
 					<u-tag text="已出餐" mode="plain" shape="circle" type="success" />
+				</view>
+				<!-- 管理员可见的开始配送按钮（外卖订单且状态为未支付或已支付） -->
+				<view v-if="isAdmin && item.eatStatus === '外卖' && (item.statusValue === 0 || item.statusValue === 1)" class="delivery-btn" @click.stop="startDelivery(item)">
+					<u-tag :text="item.statusValue === 0 ? '开始配送' : '开始配送'" mode="plain" shape="circle" type="warning" />
+				</view>
+				<!-- 管理员可见的已完成按钮（外卖订单且状态为配送中） -->
+				<view v-if="isAdmin && item.eatStatus === '外卖' && item.statusValue === 2" class="complete-btn" @click.stop="updateOrderStatus(item)">
+					<u-tag text="确认送达" mode="plain" shape="circle" type="success" />
+				</view>
+				<!-- 用户端可见的已送达文字（外卖订单且状态为配送中） -->
+				<view v-if="!isAdmin && item.eatStatus === '外卖' && item.statusValue === 3" class="delivered-text">
+					<text>已送达</text>
 				</view>
 			</view>
 		</view>
@@ -286,7 +298,7 @@ export default {
 			// 确认操作
 			uni.showModal({
 				title: '确认操作',
-				content: '确定要该订单已出餐吗？',
+				content: '确定要该订单已送达吗？',
 				success: (res) => {
 					if (res.confirm) {
 						this.updateOrderStatusRequest(item)
@@ -314,6 +326,93 @@ export default {
 				}
 			} catch (error) {
 				console.error('更新订单状态失败', error)
+			}
+		},
+		// 管理员开始配送（外卖订单）
+		startDelivery(item) {
+			// 检查权限
+			if (!this.isAdmin) {
+				uni.showToast({
+					title: '无权限操作',
+					icon: 'none'
+				})
+				return
+			}
+			
+			// 确认操作
+			uni.showModal({
+				title: '确认操作',
+				content: '确定要开始配送该订单吗？',
+				success: (res) => {
+					if (res.confirm) {
+						this.startDeliveryRequest(item)
+					}
+				}
+			})
+		},
+		// 开始配送请求
+		async startDeliveryRequest(item) {
+			try {
+				const result = await orderApi.updateOrderStatus({
+					currentUserId: this.currentUserId,
+					orderId: item.orderId || item.id,
+					status: 2 // 2: 配送中
+				})
+				if (result && result.code === 200) {
+					uni.showToast({
+						title: '已开始配送',
+						icon: 'success'
+					})
+					// 刷新订单列表
+					setTimeout(() => {
+						this.loadOrderList()
+					}, 1500)
+				}
+			} catch (error) {
+				console.error('更新订单状态失败', error)
+				uni.showToast({
+					title: '操作失败，请重试',
+					icon: 'none'
+				})
+			}
+		},
+		// 用户确认送达（外卖订单）
+		confirmDelivery(item) {
+			// 确认操作
+			uni.showModal({
+				title: '确认送达',
+				content: '确认已收到商品吗？',
+				success: (res) => {
+					if (res.confirm) {
+						this.confirmDeliveryRequest(item)
+					}
+				}
+			})
+		},
+		// 确认送达请求
+		async confirmDeliveryRequest(item) {
+			try {
+				const result = await orderApi.updateOrderStatus({
+					currentUserId: this.currentUserId,
+					orderId: item.orderId || item.id,
+					status: 3 // 3: 完成
+				})
+				if (result && result.code === 200) {
+					uni.showToast({
+						title: '确认成功',
+						icon: 'success'
+					})
+					// 刷新订单列表
+					setTimeout(() => {
+						this.loadOrderList()
+					}, 1500)
+				}
+			} catch (error) {
+				console.error('确认送达失败', error)
+				uni.showToast({
+					title: '操作失败，请重试',
+					icon: 'none'
+				})
 			}
 		}
 	}
@@ -467,6 +566,22 @@ export default {
 
 .complete-btn {
 	display: flex;
+}
+
+.delivery-btn {
+	display: flex;
+}
+
+.confirm-delivery-btn {
+	display: flex;
+}
+
+.delivered-text {
+	display: flex;
+	align-items: center;
+	font-size: 24rpx;
+	color: #67c23a;
+	font-weight: 500;
 }
 
 .expand-btn {

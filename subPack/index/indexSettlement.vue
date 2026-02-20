@@ -4,12 +4,12 @@
 		<!-- @subCurrent if true 外卖 else 堂食-->
 		<view v-if="subCurrent == 1">
 			<!-- address start-->
-			<view class="address">
+			<view class="address" @click="goToProfile">
 				<view>
-					<view class="u-font-weight">北京市朝阳区万豪公馆7号楼1单元1201</view>
+					<view class="u-font-weight">{{ userAddress || '请点击设置配送地址' }}</view>
 					<view class="u-font-24 u-type-info u-m-t-15">
-						<text class="u-m-r-10">Kaiyuan_Q</text>
-						<text>188****8888</text>
+						<text class="u-m-r-10">{{ userName || '用户' }}</text>
+						<text>{{ userPhone || '' }}</text>
 					</view>
 				</view>
 				<view>
@@ -276,24 +276,29 @@ import { SHOP_NAME } from '@/common/config.js'
 import { couponApi, orderApi } from '@/common/api.js'
 
 export default {
-	data() {
-		return {
-			// 堂食or外卖
-			subCurrent: 0,
-			form: {
-				mealsTime: '',
-				people: 0,
-				note: '',
-				phone: '13750209771'
-			},
-			// orderlist
-			orderList: [],
-			// orderTotalPrice
-			orderPrice: 0,
-			// orderNum
-			orderNum: 0,
-			// 店铺名称，解耦写死文案
-			shopName: SHOP_NAME,
+		data() {
+			return {
+				// 堂食or外卖
+				subCurrent: 0,
+				form: {
+					mealsTime: '',
+					mealsTimeFull: '', // 完整的配送时间（YYYY-MM-DD HH:mm:ss格式）
+					people: 0,
+					note: '',
+					phone: '13750209771'
+				},
+				// orderlist
+				orderList: [],
+				// orderTotalPrice
+				orderPrice: 0,
+				// orderNum
+				orderNum: 0,
+				// 店铺名称，解耦写死文案
+				shopName: SHOP_NAME,
+				// 用户信息
+				userAddress: '',
+				userName: '',
+				userPhone: '',
 			// u-cell
 			valueStyle: {
 				fontSize: '26rpx'
@@ -364,6 +369,9 @@ export default {
 			this.orderPrice = 0;
 		}
 		
+		// 加载用户信息
+		this.loadUserInfo();
+		
 		// 获取用户优惠券
 		this.fetchUserCoupons();
 		
@@ -373,7 +381,26 @@ export default {
 			this.selectedCoupon = savedCoupon;
 		}
 	},
+	onShow() {
+		// 每次显示页面时重新加载用户信息（可能从个人信息页面返回）
+		this.loadUserInfo();
+	},
 		methods: {
+		// 加载用户信息
+		loadUserInfo() {
+			const userInfo = uni.getStorageSync('userInfo') || {};
+			this.userAddress = userInfo.address || '';
+			this.userName = userInfo.name || userInfo.realname || '';
+			this.userPhone = userInfo.phone || '';
+		},
+		// 跳转到个人信息页面
+		goToProfile() {
+			// 保存当前页面状态，以便返回后继续
+			uni.setStorageSync('needReturnToSettlement', true);
+			uni.navigateTo({
+				url: '/pages/profile/profile'
+			});
+		},
 		// 获取用户优惠券
 		fetchUserCoupons() {
 			const userId = this.getUserId();
@@ -452,7 +479,25 @@ export default {
 		},
 		// PickMealsTimer
 		mealsPicker(param) {
+			// 显示格式：用于界面显示
 			this.form.mealsTime = param.day + "日" + ' ' + param.hour + ":" + param.minute;
+			
+			// 获取当前日期，用于构建完整的日期时间
+			const now = new Date();
+			const year = now.getFullYear();
+			const month = now.getMonth() + 1; // 月份从0开始，需要+1
+			// 时间选择器返回的day可能是字符串或数字，需要转换为数字
+			const day = parseInt(param.day) || now.getDate();
+			const hour = parseInt(param.hour) || 0;
+			const minute = parseInt(param.minute) || 0;
+			
+			// 格式化日期时间：YYYY-MM-DD HH:mm:ss
+			const formatNumber = (n) => {
+				const num = parseInt(n);
+				return num < 10 ? '0' + num : num.toString();
+			};
+			
+			this.form.mealsTimeFull = `${year}-${formatNumber(month)}-${formatNumber(day)} ${formatNumber(hour)}:${formatNumber(minute)}:00`;
 		},
 		validatePhone() {
 			const phone = (this.form.phone || '').trim();
@@ -526,13 +571,26 @@ export default {
 				return;
 			}
 
+			// 根据堂食 / 外送确定配送方式和电话
+			const userInfo = uni.getStorageSync('userInfo') || {};
+			const isDelivery = this.subCurrent === 1; // 0: 堂食, 1: 外送
+			const phone = isDelivery
+				? (userInfo.phone || this.form.phone || null)
+				: (this.form.phone || userInfo.phone || null);
+
 			const requestData = {
 				userId: this.getUserId() || 7,
-				phone: this.form.phone ? this.form.phone : null,
+				phone: phone,
 				note: this.form.note ? this.form.note : '',
 				cartItems,
+				delivery: isDelivery ? 1 : 0,
 				userCouponId: this.selectedCoupon ? this.selectedCoupon.id : null  // 用户优惠券ID
 			};
+
+			// 外送订单需要添加配送时间
+			if (isDelivery && this.form.mealsTimeFull) {
+				requestData.deliveryTime = this.form.mealsTimeFull;
+			}
 
 			console.log(requestData, 'requestData');
 

@@ -15,11 +15,6 @@ function request(options) {
 			'content-type': 'application/json'
 		}
 		
-		// 如果存在 token，添加到 header
-		// if (token) {
-		// 	defaultHeader['Authorization'] = `Bearer ${token}`
-		// }
-		
 		// 合并配置（注意：options 中的 header 会覆盖 defaultHeader）
 		const config = {
 			url: `${BASE_URL}${options.url}`,
