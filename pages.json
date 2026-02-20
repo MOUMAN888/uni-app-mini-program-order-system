@@ -1,0 +1,154 @@
+{
+	"easycom": {
+		"custom": {
+			"^u-(.*)": "uview-ui/components/u-$1/u-$1.vue"
+		}
+	},
+	"pages": [{
+			"path": "pages/index/index",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/menu/menu",
+			"style": {
+				"navigationBarTitleText": "菜单"
+			}
+		},
+		{
+			"path": "pages/order/order",
+			"style": {
+				"navigationBarTitleText": "订单"
+			}
+		},
+		{
+			"path": "pages/my/my",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/register/register",
+			"style": {
+				"navigationBarTitleText": "注册",
+				"navigationBarBackgroundColor": "#EE2F37",
+				"navigationBarTextStyle": "white"
+			}
+		},
+		{
+			"path": "pages/login/login",
+			"style": {
+				"navigationBarTitleText": "登录",
+				"navigationBarBackgroundColor": "#EE2F37",
+				"navigationBarTextStyle": "white"
+			}
+		},
+		{
+			"path": "pages/myCoupon/myCoupon",
+			"style": {
+				"navigationBarTitleText": "我的优惠券",
+				"navigationBarBackgroundColor": "#EE2F37",
+				"navigationBarTextStyle": "white"
+			}
+		},
+		{
+			"path": "pages/coupon/coupon",
+			"style": {
+				"navigationBarTitleText": "优惠券"
+			}
+		},
+		{
+			"path": "pages/administrator/administrator",
+			"style": {
+				"navigationBarTitleText": "管理员设置",
+				"navigationBarBackgroundColor": "#EE2F37",
+				"navigationBarTextStyle": "white"
+			}
+		},
+		{
+			"path": "pages/profile/profile",
+			"style": {
+				"navigationBarTitleText": "个人信息",
+				"navigationBarBackgroundColor": "#EE2F37",
+				"navigationBarTextStyle": "white"
+			}
+		},
+		{
+			"path": "pages/feedback/feedback",
+			"style": {
+				"navigationBarTitleText": "意见反馈",
+				"navigationBarBackgroundColor": "#EE2F37",
+				"navigationBarTextStyle": "white"
+			}
+		},
+		{
+			"path": "pages/noticeManage/noticeManage",
+			"style": {
+				"navigationBarTitleText": "公告管理",
+				"navigationBarBackgroundColor": "#EE2F37",
+				"navigationBarTextStyle": "white"
+			}
+		}
+	],
+	"subPackages": [{
+		"root": "subPack",
+		"pages": [{
+				"path": "index/indexSettlement",
+				"style": {
+					"navigationBarTitleText": "确认订单"
+				}
+			},
+			{
+				"path": "index/indexPaysuccess",
+				"style": {
+					"navigationStyle": "custom"
+				}
+			},
+			{
+				"path": "order/orderDetail",
+				"style": {
+					"navigationBarTitleText": "订单详情"
+				}
+			}
+		]
+	}],
+	"preloadRule": {
+		"pages/index/index": {
+			"network": "all",
+			"packages": ["subPack"]
+		}
+	},
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "点菜系统",
+		"navigationBarBackgroundColor": "#ffffff",
+		"backgroundColor": "#ffffff"
+	},
+	"uniIdRouter": {},
+	"tabBar": {
+		"color": "#CDCDCD",
+		"selectedColor": "#EE2F37",
+		"list": [{
+			"pagePath": "pages/index/index",
+			"text": "首页",
+			"iconPath": "static/tabbar/index.png",
+			"selectedIconPath": "static/tabbar/s-index.png"
+		}, {
+			"pagePath": "pages/menu/menu",
+			"text": "点餐",
+			"iconPath": "static/tabbar/meal.png",
+			"selectedIconPath": "static/tabbar/s-meal.png"
+		}, {
+			"pagePath": "pages/order/order",
+			"text": "订单",
+			"iconPath": "static/tabbar/order.png",
+			"selectedIconPath": "static/tabbar/s-order.png"
+		}, {
+			"pagePath": "pages/my/my",
+			"text": "我的",
+			"iconPath": "static/tabbar/my.png",
+			"selectedIconPath": "static/tabbar/s-my.png"
+		}]
+	}
+}

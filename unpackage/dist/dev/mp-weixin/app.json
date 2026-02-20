@@ -1,0 +1,71 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/menu/menu",
+    "pages/order/order",
+    "pages/my/my",
+    "pages/register/register",
+    "pages/login/login",
+    "pages/myCoupon/myCoupon",
+    "pages/coupon/coupon",
+    "pages/administrator/administrator",
+    "pages/profile/profile",
+    "pages/feedback/feedback",
+    "pages/noticeManage/noticeManage"
+  ],
+  "subPackages": [
+    {
+      "root": "subPack",
+      "pages": [
+        "index/indexSettlement",
+        "index/indexPaysuccess",
+        "order/orderDetail"
+      ]
+    }
+  ],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "点菜系统",
+    "navigationBarBackgroundColor": "#ffffff",
+    "backgroundColor": "#ffffff"
+  },
+  "tabBar": {
+    "color": "#CDCDCD",
+    "selectedColor": "#EE2F37",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "static/tabbar/index.png",
+        "selectedIconPath": "static/tabbar/s-index.png"
+      },
+      {
+        "pagePath": "pages/menu/menu",
+        "text": "点餐",
+        "iconPath": "static/tabbar/meal.png",
+        "selectedIconPath": "static/tabbar/s-meal.png"
+      },
+      {
+        "pagePath": "pages/order/order",
+        "text": "订单",
+        "iconPath": "static/tabbar/order.png",
+        "selectedIconPath": "static/tabbar/s-order.png"
+      },
+      {
+        "pagePath": "pages/my/my",
+        "text": "我的",
+        "iconPath": "static/tabbar/my.png",
+        "selectedIconPath": "static/tabbar/s-my.png"
+      }
+    ]
+  },
+  "preloadRule": {
+    "pages/index/index": {
+      "network": "all",
+      "packages": [
+        "subPack"
+      ]
+    }
+  },
+  "usingComponents": {}
+}

@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "我的优惠券",
+  "navigationBarBackgroundColor": "#EE2F37",
+  "navigationBarTextStyle": "white",
+  "usingComponents": {
+    "u-gap": "/node-modules/uview-ui/components/u-gap/u-gap",
+    "u-empty": "/node-modules/uview-ui/components/u-empty/u-empty"
+  }
+}

@@ -1,0 +1,190 @@
+@charset "UTF-8";
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.flex {
+  display: flex;
+}
+.content {
+  margin: 30rpx;
+  padding: 20rpx;
+  box-shadow: 2px 0px 8px 0px rgba(243, 244, 246, 0.95);
+}
+.content__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20rpx;
+}
+.content__header-main {
+  flex: 1;
+}
+.content__order-info {
+  margin-top: 12rpx;
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 24rpx;
+  color: #909399;
+  line-height: 1.6;
+}
+.content__meta-item {
+  margin-right: 20rpx;
+  display: flex;
+  align-items: center;
+}
+.content__meta-label {
+  color: #303133;
+  margin-right: 8rpx;
+  font-weight: 500;
+}
+.content__address {
+  font-weight: bold;
+  font-size: 28rpx;
+}
+.content__status {
+  font-size: 24rpx;
+  color: #303133;
+  font-weight: 500;
+}
+.content__status-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  min-width: 120rpx;
+}
+.content__vip {
+  background-color: #EE2F37;
+  color: white;
+  padding: 5rpx 0;
+  width: 77rpx;
+  text-align: center;
+  border-radius: 7rpx;
+  font-size: 20rpx;
+  margin-right: 10rpx;
+}
+.menulist {
+  display: flex;
+  margin-top: 30rpx;
+}
+.item-menu-name {
+  display: flex;
+  flex-direction: column;
+  margin-left: 20rpx;
+  width: 100%;
+}
+.item-menu-name__name {
+  font-size: 26rpx;
+  font-weight: bold;
+}
+.item-menu-name__desc {
+  margin: 10rpx 0;
+  font-size: 22rpx;
+  font-weight: bold;
+  color: #909399;
+}
+.item-menu-image {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 20rpx;
+}
+.item-menu-price {
+  display: flex;
+  justify-content: space-between;
+}
+.item-menu-price__color {
+  font-weight: bold;
+  font-size: 24rpx;
+  color: #EE2F37;
+}
+.item-menu-price__num {
+  color: #909399;
+  font-size: 22rpx;
+}
+.total-price-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.total-price-box .total-price {
+  text-align: right;
+  font-size: 22rpx;
+  font-weight: bold;
+  margin-top: 30rpx;
+}
+.action-btns {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 20rpx;
+  margin-top: 30rpx;
+}
+.again-btn {
+  display: flex;
+}
+.complete-btn {
+  display: flex;
+}
+.expand-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20rpx;
+  padding: 15rpx 0;
+  color: #EE2F37;
+  font-size: 24rpx;
+  cursor: pointer;
+}
+.expand-btn__text {
+  margin-right: 10rpx;
+}
+.expand-btn__icon {
+  font-size: 20rpx;
+}
+.empty-order {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  padding: 100rpx 30rpx;
+}
+.empty-order__icon {
+  margin-bottom: 40rpx;
+  opacity: 0.6;
+}
+.empty-order__text {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #303133;
+  margin-bottom: 20rpx;
+}
+.empty-order__desc {
+  font-size: 28rpx;
+  color: #909399;
+  margin-bottom: 60rpx;
+}
+.empty-order__btn {
+  width: 300rpx;
+}

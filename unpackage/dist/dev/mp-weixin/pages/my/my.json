@@ -1,0 +1,10 @@
+{
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "u-line-progress": "/node-modules/uview-ui/components/u-line-progress/u-line-progress",
+    "u-tag": "/node-modules/uview-ui/components/u-tag/u-tag",
+    "u-avatar": "/node-modules/uview-ui/components/u-avatar/u-avatar",
+    "u-cell-group": "/node-modules/uview-ui/components/u-cell-group/u-cell-group",
+    "u-cell-item": "/node-modules/uview-ui/components/u-cell-item/u-cell-item"
+  }
+}
