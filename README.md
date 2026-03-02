@@ -6,7 +6,6 @@
 ## 📌 项目简介
 
 本项目是一个基于 **Vue2（Options API）+ uni-app + uView UI** 开发的多端餐饮点单系统。
-
 支持功能：
 
 * 🏠 门店堂食
@@ -17,6 +16,9 @@
 * 🛠 管理员后台功能
 
 ---
+<img src="http://img.mouman.top/photos/home.jpg" width="600" />
+<img src="http://img.mouman.top/photos/my.jpg" width="600" />
+<img src="http://img.mouman.top/photos/login.jpg" width="600" />
 
 ## 🧱 技术栈
 
